@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from typing import Optional, List, Dict
 from configs.tools.switchers import *
+from langchain_core.documents import Document
+from rag.create_rag import InMemoryRag
 
 def check_date_availability(
     date: str,
@@ -115,3 +117,26 @@ def book_tour(
     
     print(f"✅ Reserva confirmada con referencia: {booking_reference}")
     return result
+
+def get_rag_response(question: str) -> List[Document]:
+    """
+    Get a response from the RAG tool
+    
+    Args:
+        question: Question to ask the RAG tool
+    
+    Returns:
+        List of documents with the response
+    """
+    print(f"🔍 Buscando respuesta para: {question}")
+    rag = InMemoryRag()
+
+    urls = [
+        "https://support.guruwalk.com/portal/es/kb/articles/pol%C3%ADtica-de-cancelaci%C3%B3n",
+        "https://support.guruwalk.com/portal/es/kb/articles/c%C3%B3mo-puedo-obtener-el-carnet-de-gu%C3%ADa-oficial",
+    ]
+    rag.load_and_index_urls(urls)
+
+    docs = rag.retrieve(question)
+
+    return docs

@@ -19,7 +19,7 @@ availability_agent = Agent(
 cancellation_agent = Agent(
     name="Cancellation Agent",
     instructions=cancellation_instructions(context_variables),
-    functions=[]
+    functions=[get_rag_response]
 )
 
 reviews_agent = Agent(
